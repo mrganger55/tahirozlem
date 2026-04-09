@@ -105,6 +105,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;o
 </head>
 <body>
 
+<audio id="bgmusic" loop preload="auto" style="display:none"><source src="music.mp3" type="audio/mpeg"></audio>
 <div class="bg"></div>
 <div class="stars" id="stars"></div>
 <div class="hbg" id="hbg"></div>
@@ -191,6 +192,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;o
     var h=document.getElementById('hearts');
     if(h.classList.contains('merge'))return;
     h.classList.add('merge');
+    // Fon muzigi baslat (dusuk ses)
+    var m=document.getElementById('bgmusic');m.volume=0.25;m.play().catch(function(){});
     setTimeout(function(){h.classList.add('fly')},1800);
     setTimeout(function(){cur=0;score=0;wrongs=0;nextQ();showPg('pg1')},3000);
   });
