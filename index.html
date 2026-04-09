@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tahir ve Ozlem</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;height:100vh;height:100dvh;background:#0d0520;color:#fff;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+
+.bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;background:linear-gradient(135deg,#0d0520,#1a0a2e,#2d1050);background-size:400% 400%;animation:bgA 15s ease infinite}
+@keyframes bgA{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.star{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d) ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:0.2;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
+
+.hbg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.bh{position:absolute;bottom:-300px;opacity:0.12;animation:fU var(--s) ease-in infinite}
+.bh i{font-style:normal;font-size:200px;display:block;position:relative}
+.bh .nm{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);font-size:20px;font-weight:700;color:rgba(255,255,255,0.6)}
+@keyframes fU{0%{transform:translateY(0);opacity:0.1}30%{opacity:0.2}100%{transform:translateY(-130vh);opacity:0}}
+
+.bar{position:fixed;top:0;left:0;height:4px;z-index:20;background:linear-gradient(90deg,#ff4477,#ffaa44,#44ff88,#4488ff,#ff4477);background-size:300% 100%;animation:rb 3s linear infinite;transition:width 0.5s}
+@keyframes rb{0%{background-position:0%}100%{background-position:300%}}
+
+.wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;height:100dvh;padding:20px;text-align:center}
+
+.page{display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:550px}
+.page.show{display:flex;animation:fadeUp 0.6s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+
+/* GIRIS */
+.glow{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,68,119,0.15),transparent 70%);filter:blur(40px);animation:gP 4s ease infinite}
+@keyframes gP{0%,100%{transform:scale(1);opacity:0.5}50%{transform:scale(1.3);opacity:0.8}}
+
+.title{font-size:clamp(26px,6vw,44px);font-weight:700;margin-bottom:12px;line-height:1.3}
+.sub{font-size:clamp(14px,3vw,17px);color:rgba(255,255,255,0.6);margin-bottom:45px}
+
+.hearts{position:relative;width:230px;height:200px}
+.hh{position:absolute;top:0;font-size:120px;line-height:1;transition:all 1.8s cubic-bezier(0.4,0,0.2,1);filter:drop-shadow(0 0 20px rgba(255,68,119,0.6))}
+.hL{left:0;clip-path:inset(0 50% 0 0)}
+.hR{right:0;clip-path:inset(0 0 0 50%)}
+.hn{position:absolute;font-size:14px;font-weight:700;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.7);z-index:3}
+.nL{top:50%;left:18%;transform:translate(-50%,-50%)}
+.nR{top:50%;right:18%;transform:translate(50%,-50%)}
+.hearts.merge .hL{left:calc(50% - 60px)}
+.hearts.merge .hR{right:calc(50% - 60px)}
+.hearts.fly{animation:hBurst 0.5s ease,hFly 1s ease 0.5s forwards}
+@keyframes hBurst{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes hFly{to{transform:scale(0.2) translateY(-350px);opacity:0}}
+
+/* BUTON — iPhone icin button elementi */
+.btn{display:inline-block;background:linear-gradient(135deg,#ff4477,#ff6699);border:none;border-radius:30px;padding:14px 40px;color:#fff;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:15px;-webkit-appearance:none;touch-action:manipulation}
+.btn:active{transform:scale(0.96);opacity:0.9}
+.btn-ghost{background:none;border:1px solid rgba(255,255,255,0.3);color:#ff99bb}
+
+/* SORULAR */
+.qnum{font-size:12px;color:rgba(255,255,255,0.35);letter-spacing:3px;margin-bottom:8px}
+.qtxt{font-size:clamp(18px,4vw,28px);font-weight:700;margin-bottom:18px;line-height:1.4}
+
+.tmr{width:100%;max-width:400px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-bottom:18px;overflow:hidden}
+.tmr-fill{height:100%;background:linear-gradient(90deg,#00e676,#ffaa00,#ff4444);border-radius:2px;transition:width 0.3s linear}
+
+.opts{width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px}
+/* iPhone fix: button elementi kullan, div degil */
+.opt{display:block;width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:15px 20px;color:#fff;font-size:15px;font-family:inherit;text-align:left;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;transition:all 0.2s}
+.opt:active{background:rgba(255,68,119,0.1);transform:scale(0.98)}
+.opt.ok{background:rgba(0,230,100,0.25)!important;border-color:#00e664!important}
+.opt.no{background:rgba(255,50,50,0.25)!important;border-color:#ff3232!important;animation:shake 0.4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.msg{margin-top:12px;font-size:14px;min-height:22px}
+
+/* SONUC */
+.emoji{font-size:80px;margin-bottom:12px}
+.rtxt{font-size:clamp(20px,4vw,34px);font-weight:700;margin-bottom:8px}
+.rscore{font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:22px}
+.moti{font-size:14px;color:rgba(255,255,255,0.5);margin-top:12px;font-style:italic;max-width:350px;line-height:1.5}
+
+.gift{width:130px;height:130px;margin:0 auto;animation:gBounce 2s ease infinite}
+@keyframes gBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.gift svg{width:100%;height:100%;filter:drop-shadow(0 8px 25px rgba(255,68,119,0.4))}
+.gift.opening svg{animation:gOpen 0.8s ease forwards}
+@keyframes gOpen{to{transform:scale(0);opacity:0}}
+.gift.locked{opacity:0.2;animation:none}
+
+/* EMOJI BURST */
+.eburst{position:fixed;pointer-events:none;z-index:50;font-size:28px;animation:burst 1s ease forwards}
+@keyframes burst{0%{transform:scale(0);opacity:1}50%{transform:scale(1.5) rotate(180deg);opacity:0.8}100%{transform:scale(0) translateY(-80px);opacity:0}}
+
+/* KONFETI */
+.confetti{position:fixed;top:-10px;pointer-events:none;z-index:50;border-radius:2px;animation:cfall var(--t) linear forwards}
+@keyframes cfall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* VIDEO */
+.vidbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:100;flex-direction:column;align-items:center;justify-content:center}
+.vidbox.on{display:flex}
+.vidbox video{max-width:92%;max-height:70%;border-radius:10px}
+.vidbox .vclose{position:absolute;top:12px;right:20px;font-size:28px;color:#fff;background:none;border:none;cursor:pointer;-webkit-appearance:none;padding:10px}
+.vidbox .vnote{color:rgba(255,255,255,0.4);font-size:12px;margin-top:12px}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="stars" id="stars"></div>
+<div class="hbg" id="hbg"></div>
+<div class="bar" id="bar" style="width:0"></div>
+
+<div class="wrap">
+
+  <!-- GIRIS -->
+  <div class="page show" id="pg0">
+    <div class="glow"></div>
+    <div class="title">Nasil biz olduk?</div>
+    <div class="sub">Hadi gel, seninle bir yolculuga cikalim</div>
+    <div class="hearts" id="hearts">
+      <div class="hh hL">&#10084;</div>
+      <span class="hn nL">Tahir</span>
+      <div class="hh hR">&#10084;</div>
+      <span class="hn nR">Ozlem</span>
+    </div>
+    <button class="btn" id="startBtn" type="button">Yolculuga Cikalim</button>
+  </div>
+
+  <!-- SORU -->
+  <div class="page" id="pg1">
+    <div class="qnum" id="qnum"></div>
+    <div class="qtxt" id="qtxt"></div>
+    <div class="tmr"><div class="tmr-fill" id="tmr"></div></div>
+    <div class="opts" id="opts"></div>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <!-- SONUC -->
+  <div class="page" id="pg2">
+    <div class="emoji" id="emo"></div>
+    <div class="rtxt" id="rtxt"></div>
+    <div class="rscore" id="rsc"></div>
+    <div id="prize"></div>
+    <div class="moti" id="moti"></div>
+  </div>
+
+</div>
+
+<!-- VIDEO -->
+<div class="vidbox" id="vidbox">
+  <button class="vclose" id="vclose" type="button">&#10005;</button>
+  <video id="vid" controls playsinline webkit-playsinline preload="none">
+    <source src="https://drive.google.com/uc?export=download&id=1GiGiyBXiuAmLCO62MFZaR69Ze6uKeJQH" type="video/mp4">
+  </video>
+  <div class="vnote">Video yukleniyorsa biraz bekleyin</div>
+</div>
+
+<script>
+(function(){
+  // VERILER
+  var Q=[
+    {q:"Kalbimi calan ilk bana verdigin tepki?",o:["Oturusun","Kahkaha atisin","Gulusun","Tesettürlu olusun"],c:2},
+    {q:"Seni rahatsiz eden noktam nedir?",o:["Sakaci olmam","Tatliyi hic düsünmeden yemem","Espritüel yaraticilgim","Fazla rahat olmam"],c:3},
+    {q:"Ilk basbasa kahvaltimizi nerede yaptik?",o:["Atatürk Arboretumu","Belgrad Ormani","Aydos Ormani","Polonezköy Tabiat Parki"],c:3},
+    {q:"Sana ömür boyu söz verdigim o unutulmaz gün?",o:["14 Ekim 2025","12 Ekim 2025","15 Ekim 2025","13 Ekim 2025"],c:3},
+    {q:"Yildizlarin altinda birlikte izledigimiz ilk film?",o:["La La Land","Notebook","Yüzüklerin Efendisi","Alacakaranlik Serisi"],c:3},
+    {q:"Sehrin üstünde sadece ikimize ait o anlamli yemek?",o:["Kiz Kulesi","Galata Kulesi","Camlica Kulesi","Sapphire Restoran"],c:2},
+    {q:"Beni en iyi sen tanirsin... en cok ne kizdirir?",o:["Telefona cok bakmak","Plansiz olmak","Gec kalmak","Baskalarinin yaptigini örnek göstermek"],c:3},
+    {q:"Parmaklarimizin ilk birlesmesi icin uydurdugum bahane?",o:["Yolda tökezlemem","Bir sey düsürmem","Üsümüs gibi yapmam","Önümüzdeki cifti göstermem"],c:3},
+    {q:"Daha tanismadan aramizda kivilcim cikaran ilk tartisma?",o:["Ortak arkadaslar","Bulusma yeri","Telefon numarasi","Instagram hesabi"],c:2},
+    {q:"Sana verdigim ilk hediye neydi?",o:["Parfüm","Gül buketi","Kolye","Bileklik"],c:3}
+  ];
+  var MOTI=["Üzülme, tekrar deneyelim...","Her hata bizi birbirimize yaklastirir","Bir nefes al, tekrar basla","Sen basarabilirsin!","Gercek ask sabir ister..."];
+  var cur=0,score=0,wrongs=0,locked=false,timer=null;
+
+  // YILDIZLAR
+  var st=document.getElementById('stars');
+  for(var i=0;i<50;i++){var d=document.createElement('div');d.className='star';d.style.cssText='left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;width:'+(1+Math.random()*2)+'px;height:'+(1+Math.random()*2)+'px;--d:'+(2+Math.random()*3)+'s;animation-delay:'+Math.random()*3+'s';st.appendChild(d)}
+
+  // KALPLER ARKA PLAN
+  setInterval(function(){var h=document.createElement('div');h.className='bh';var L=Math.random()>0.5;h.style.left=(L?5+Math.random()*40:55+Math.random()*40)+'%';h.style.setProperty('--s',(8+Math.random()*5)+'s');h.innerHTML='<i style="color:'+(L?'#ff3366':'#ff6699')+'">&#10084;<span class="nm">'+(L?'Tahir':'Ozlem')+'</span></i>';document.getElementById('hbg').appendChild(h);setTimeout(function(){h.remove()},13000)},1500);
+
+  // SAYFA GOSTER
+  function showPg(id){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('show');document.getElementById(id).classList.add('show')}
+
+  // KARISTIR
+  function shuffle(q){var correct=q.o[q.c];var a=q.o.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}q.o=a;q.c=a.indexOf(correct)}
+
+  // BASLA BUTONU
+  document.getElementById('startBtn').addEventListener('click',function(){
+    var h=document.getElementById('hearts');
+    if(h.classList.contains('merge'))return;
+    h.classList.add('merge');
+    setTimeout(function(){h.classList.add('fly')},1800);
+    setTimeout(function(){cur=0;score=0;wrongs=0;nextQ();showPg('pg1')},3000);
+  });
+
+  // SORU GOSTER
+  function nextQ(){
+    var q=Q[cur];
+    shuffle(q);
+    document.getElementById('qnum').textContent='SORU '+(cur+1)+' / '+Q.length;
+    document.getElementById('qtxt').textContent=q.q;
+    document.getElementById('msg').textContent='';
+    document.getElementById('bar').style.width=((cur+1)/Q.length*100)+'%';
+    locked=false;
+
+    var opts=document.getElementById('opts');
+    opts.innerHTML='';
+    for(var i=0;i<q.o.length;i++){
+      var btn=document.createElement('button');
+      btn.type='button';
+      btn.className='opt';
+      btn.textContent=q.o[i];
+      btn.setAttribute('data-i',i);
+      btn.addEventListener('click',onPick);
+      opts.appendChild(btn);
+    }
+
+    // TIMER 15sn
+    var t=100;
+    clearInterval(timer);
+    document.getElementById('tmr').style.width='100%';
+    timer=setInterval(function(){
+      t-=0.67;
+      document.getElementById('tmr').style.width=Math.max(0,t)+'%';
+      if(t<=0){clearInterval(timer);timeUp()}
+    },100);
+  }
+
+  // SURE DOLDU
+  function timeUp(){
+    if(locked)return;
+    locked=true;wrongs++;
+    document.getElementById('msg').textContent='Süre doldu!';
+    document.getElementById('msg').style.color='#ffaa00';
+    if(wrongs>=3){setTimeout(fail,1500);return}
+    setTimeout(function(){locked=false;document.getElementById('msg').textContent='';startTimer()},1500);
+  }
+
+  function startTimer(){
+    var t=100;clearInterval(timer);document.getElementById('tmr').style.width='100%';
+    timer=setInterval(function(){t-=0.67;document.getElementById('tmr').style.width=Math.max(0,t)+'%';if(t<=0){clearInterval(timer);timeUp()}},100);
+  }
+
+  // CEVAP SEC
+  function onPick(){
+    if(locked)return;
+    locked=true;
+    clearInterval(timer);
+    var idx=parseInt(this.getAttribute('data-i'));
+    var q=Q[cur];
+    var all=document.querySelectorAll('.opt');
+
+    if(idx===q.c){
+      this.classList.add('ok');score++;
+      document.getElementById('msg').textContent='Dogru!';
+      document.getElementById('msg').style.color='#00e676';
+      burst(this,'🎉');
+      setTimeout(function(){cur++;if(cur<Q.length)nextQ();else result()},800);
+    }else{
+      this.classList.add('no');wrongs++;
+      document.getElementById('msg').textContent='Yanlis!';
+      document.getElementById('msg').style.color='#ff5252';
+      burst(this,'💔');
+      if(wrongs>=3){setTimeout(fail,1500);return}
+      setTimeout(function(){
+        locked=false;
+        for(var i=0;i<all.length;i++)all[i].classList.remove('no','ok');
+        document.getElementById('msg').textContent='';
+        startTimer();
+      },1500);
+    }
+  }
+
+  // EMOJI PATLAMA
+  function burst(el,em){
+    for(var i=0;i<5;i++){
+      var d=document.createElement('div');d.className='eburst';d.textContent=em;
+      var r=el.getBoundingClientRect();
+      d.style.left=(r.left+r.width/2+(-25+Math.random()*50))+'px';
+      d.style.top=(r.top+(-15+Math.random()*30))+'px';
+      document.body.appendChild(d);
+      setTimeout(function(el){el.remove()},1500,d);
+    }
+  }
+
+  // 3 HATA — BASA DON
+  function fail(){
+    clearInterval(timer);
+    document.getElementById('emo').textContent='🥺';
+    document.getElementById('rtxt').textContent='3 hata yaptin...';
+    document.getElementById('rsc').textContent=MOTI[Math.floor(Math.random()*MOTI.length)];
+    document.getElementById('prize').innerHTML='<button class="btn" type="button" onclick="location.reload()">Basa Dön</button>';
+    document.getElementById('moti').textContent='';
+    showPg('pg2');
+  }
+
+  // SONUC
+  function result(){
+    clearInterval(timer);
+    var pct=Math.round(score/Q.length*100);
+    var pass=pct>=80;
+    var em,tx;
+    if(pct===100){em='😍';tx='Mükemmel! Beni cok iyi taniyorsun!'}
+    else if(pct>=80){em='🥰';tx='Harika!'}
+    else if(pct>=60){em='😊';tx='Fena degil!'}
+    else{em='🤔';tx='Biraz daha calis...'}
+
+    document.getElementById('emo').textContent=em;
+    document.getElementById('rtxt').textContent=tx;
+    document.getElementById('rsc').textContent='Dogruluk: %'+pct;
+    document.getElementById('bar').style.width='100%';
+
+    var pr=document.getElementById('prize');
+    var mo=document.getElementById('moti');
+
+    if(pass){
+      confetti();
+      pr.innerHTML='<div class="gift" id="giftEl"><svg viewBox="0 0 100 100"><rect x="15" y="42" width="70" height="48" rx="6" fill="#ff4477" stroke="#ffccdd" stroke-width="1.5"/><rect x="10" y="30" width="80" height="16" rx="5" fill="#ff6699" stroke="#ffccdd" stroke-width="1.5"/><rect x="45" y="30" width="10" height="60" fill="#ffcc00" rx="2"/><path d="M50 30 C50 14,28 8,28 24 C28 30,50 30,50 30" fill="#ffcc00"/><path d="M50 30 C50 14,72 8,72 24 C72 30,50 30,50 30" fill="#ffcc00"/></svg></div>';
+      mo.textContent='Hediyeni acmak icin kutuya dokun!';
+      document.getElementById('giftEl').addEventListener('click',function(){
+        this.classList.add('opening');
+        setTimeout(openVid,800);
+      });
+    }else{
+      pr.innerHTML='<div class="gift locked"><svg viewBox="0 0 100 100"><rect x="15" y="42" width="70" height="48" rx="6" fill="#555" stroke="#777" stroke-width="1.5"/><rect x="10" y="30" width="80" height="16" rx="5" fill="#666" stroke="#777" stroke-width="1.5"/><text x="50" y="73" text-anchor="middle" fill="#fff" font-size="22">&#128274;</text></svg></div><button class="btn" type="button" onclick="location.reload()">Tekrar Dene</button>';
+      mo.textContent=MOTI[Math.floor(Math.random()*MOTI.length)];
+    }
+    showPg('pg2');
+  }
+
+  // KONFETI
+  function confetti(){
+    var c=['#ff4477','#ffaa44','#44ff88','#4488ff','#ff44ff','#ffcc00'];
+    for(var i=0;i<40;i++){
+      var d=document.createElement('div');d.className='confetti';
+      d.style.cssText='left:'+Math.random()*100+'%;background:'+c[Math.floor(Math.random()*c.length)]+';--t:'+(2+Math.random()*3)+'s;animation-delay:'+Math.random()+'s;width:'+(5+Math.random()*8)+'px;height:'+(5+Math.random()*8)+'px';
+      document.body.appendChild(d);setTimeout(function(el){el.remove()},5000,d);
+    }
+  }
+
+  // VIDEO
+  function openVid(){
+    document.getElementById('vidbox').classList.add('on');
+    var v=document.getElementById('vid');
+    v.load();v.play();
+  }
+  document.getElementById('vclose').addEventListener('click',function(){
+    document.getElementById('vidbox').classList.remove('on');
+    document.getElementById('vid').pause();
+  });
+
+})();
+</script>
+</body>
+</html>
